@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08fac293d5ec4cc288fbc225d45030f3, type: 3}
   m_Name: PaddleSettings
   m_EditorClassIdentifier: 
-  moveForce: 5
-  maxSpeed: 10
+  moveForce: 8
+  maxSpeed: 20
   initialSize: 1.5

@@ -21,7 +21,7 @@ namespace Utilities
             }
         }
 
-        private static void InjectComponents(object target)
+        public static void InjectComponents(object target)
         {
             var type = target.GetType();
 

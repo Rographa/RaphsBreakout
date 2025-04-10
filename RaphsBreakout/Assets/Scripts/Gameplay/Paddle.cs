@@ -1,4 +1,5 @@
 using System;
+using Interfaces;
 using Managers;
 using ScriptableObjects;
 using UnityEngine;
@@ -8,20 +9,27 @@ using Utilities;
 
 namespace Gameplay
 {
-    public class Paddle : MonoBehaviour
+    public class Paddle : MonoBehaviour, IColorable
     {
         private float MaxSpeed => _data?.MaxSpeed ?? 10f;
         private float MoveForce => _data?.MoveForce ?? 5f;
         [GetComponent] private Rigidbody2D _rb;
+        [GetComponent] private SpriteRenderer _renderer;
 
         private float _currentSpeed;
         private bool _movePerformedThisFrame;
         private PaddleSettingsData _data;
+        [field: SerializeField] public ColorableId Id { get; set; }
 
         public void Setup(PaddleSettingsData data)
         {
             _data = data.Clone();
             transform.localScale = _data.GetInitialSize();
+        }
+
+        public void SetColor(Color color)
+        {
+            _renderer.color = color;
         }
 
         public void OnMove(InputAction.CallbackContext context)

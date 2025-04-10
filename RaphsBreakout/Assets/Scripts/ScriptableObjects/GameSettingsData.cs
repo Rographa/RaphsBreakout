@@ -7,5 +7,7 @@ namespace ScriptableObjects
     {
         public BallSettingsData ballSettings;
         public PaddleSettingsData paddleSettings;
+        public ColorSettingsData colorSettingsData;
+        
     }
 }

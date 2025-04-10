@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ade285b7c943084caa3a704c4a48c7a, type: 3}
+  m_Name: BrickData
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 3755480057293047846, guid: 4a2554d84bbe7b6448579aec4cb392f0, type: 3}
+  health: 5
+  colorData:
+  - id: 4
+    health: 0
+  - id: 5
+    health: 5
+  - id: 6
+    health: 10
