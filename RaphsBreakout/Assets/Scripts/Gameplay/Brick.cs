@@ -110,6 +110,10 @@ namespace Gameplay
 
         public void Die()
         {
+            if (_data.CheckPowerUpSpawn())
+            {
+                LevelManager.RequestPowerUp(transform.position);
+            }
             Destroy(gameObject);
         }
 

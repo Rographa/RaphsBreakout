@@ -29,6 +29,8 @@ MonoBehaviour:
     color: {r: 1, g: 0, b: 1, a: 1}
   - id: 7
     color: {r: 0, g: 1, b: 0.8784314, a: 1}
+  - id: 8
+    color: {r: 0.19607843, g: 0.8039216, b: 0.19607843, a: 1}
   colorableIds:
   - Paddle
   - Background
@@ -38,3 +40,4 @@ MonoBehaviour:
   - RegularBrick
   - StrongBrick
   - RobustBrick
+  - PowerUp

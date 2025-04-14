@@ -9,11 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df75ca94e9aa48a68e66ecf2c664baec, type: 3}
-  m_Name: BallSettings
+  m_Script: {fileID: 11500000, guid: 18e72c9560d14fe985affeea5bc5ae4c, type: 3}
+  m_Name: PopBallEffect
   m_EditorClassIdentifier: 
-  initialSize: 0.1625
-  initialSpeed: 3
-  bumpSpeedMultiplier: 1
-  maxSpeed: 9
-  damage: 1
+  _ballsToSpawn: 3
+  <Target>k__BackingField: 2

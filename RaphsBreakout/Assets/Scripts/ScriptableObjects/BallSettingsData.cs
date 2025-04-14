@@ -9,9 +9,11 @@ namespace ScriptableObjects
         [SerializeField] private float initialSpeed;
         [SerializeField] private float bumpSpeedMultiplier;
         [SerializeField] private float maxSpeed;
+        [SerializeField] private int damage;
         public float InitialSize => initialSize;
         public float InitialSpeed => initialSpeed;
         public float BumpSpeedMultiplier => bumpSpeedMultiplier;
         public float MaxSpeed => maxSpeed;
+        public int Damage => damage;
     }
 }

@@ -17,14 +17,18 @@ namespace Gameplay
         private BallSettingsData _data;
         private Vector2 _currentSpeed;
         private float _initialSpeed;
+        private int _damage;
+
+        public float Speed => _rb.linearVelocity.magnitude;
 
         public void SetupBall(BallSettingsData data)
         {
             ComponentInjector.InjectComponents(this);
             _data = data;
             _initialSpeed = _data.InitialSpeed;
+            _damage = data.Damage;
             SetSize(_data.InitialSize);
-            _rb.linearVelocity = new Vector2(Random.value, Random.value) * _initialSpeed;
+            SetVelocity(new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * _initialSpeed);
         }
 
         public void SetSize(float size)
@@ -43,11 +47,16 @@ namespace Gameplay
         private void OnCollisionEnter2D(Collision2D other)
         {
             Reflect(other.GetContact(0).normal);
+            TryApplyDamage(other);
+        }
 
+        private void TryApplyDamage(Collision2D other)
+        {
             var damageable = other.gameObject.GetComponent<IDamageable>();
+            damageable ??= other.gameObject.GetComponentInParent<IDamageable>();
             if (damageable != null)
             {
-                damageable.TakeDamage(1);
+                damageable.TakeDamage(_damage);
             }
         }
 
@@ -56,7 +65,7 @@ namespace Gameplay
             //var velocity = (_currentSpeed + normal * 2.0f * _currentSpeed.magnitude) * _data.BumpSpeedMultiplier;
             var velocity = Vector2.Reflect(_currentSpeed, normal) * _data.BumpSpeedMultiplier;
             velocity = velocity.ClampMagnitude(_data.MaxSpeed);
-            _rb.linearVelocity = velocity;
+            SetVelocity(velocity);
         }
 
         [field: SerializeField] public ColorableId Id { get; set; }
@@ -65,6 +74,11 @@ namespace Gameplay
             _renderer.color = color;
             _trail.startColor = color;
             _trail.endColor = color;
+        }
+
+        public void SetVelocity(Vector2 velocity)
+        {
+            _rb.linearVelocity = velocity;
         }
     }
 }

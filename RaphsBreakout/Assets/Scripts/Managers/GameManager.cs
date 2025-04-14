@@ -12,7 +12,8 @@ namespace Managers
         [SerializeField] private GameSettingsData gameSettings;
         [SerializeField] private Paddle paddle;
 
-        private ColorSettingsData ColorSettings => gameSettings.colorSettingsData;
+        private ColorSettingsData ColorSettings => gameSettings.colorSettings;
+        public PowerUpSettingsData PowerUpSettings => gameSettings.powerUpSettings;
         protected override void Init()
         {
             base.Init();
@@ -37,7 +38,7 @@ namespace Managers
 
         public Color GetColor(ColorableId id)
         {
-            return gameSettings.colorSettingsData.Get(id);
+            return gameSettings.colorSettings.Get(id);
         }
 
         public BallSettingsData GetBallData()

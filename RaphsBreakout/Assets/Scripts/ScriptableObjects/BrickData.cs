@@ -4,6 +4,7 @@ using System.Linq;
 using Gameplay;
 using Managers;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace ScriptableObjects
 {
@@ -12,6 +13,7 @@ namespace ScriptableObjects
     {
         [SerializeField] private Brick prefab;
         [SerializeField] private int health;
+        [SerializeField, Range(0f,1f)] private float chanceForPowerUp;
         [SerializeField] private List<BrickColorData> colorData;
 
         public ColorableId GetColorableId(int currentHealth)
@@ -32,6 +34,7 @@ namespace ScriptableObjects
         }
 
         public int Health => health;
+        public bool CheckPowerUpSpawn() => Random.value < chanceForPowerUp;
     }
     
     [Serializable]

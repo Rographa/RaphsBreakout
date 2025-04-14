@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Enums;
 using Gameplay;
+using Gameplay.PowerUpEffects;
 using ScriptableObjects;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,6 +18,7 @@ namespace Managers
         [SerializeField] private Vector3 ballInitialWorldPos;
         [FormerlySerializedAs("wallBlockPrefab")] [SerializeField] private GameObject wallBrickPrefab;
         [SerializeField] private Ball ballPrefab;
+        [SerializeField] private PowerUp powerUpPrefab;
         [GetComponent] private Grid _grid;
 
         private int _width;
@@ -24,6 +27,19 @@ namespace Managers
 
         private List<GameObject> _wallBrickList = new();
         private PolygonCollider2D _wallBrickCollider;
+        private List<Ball> _activeBalls = new();
+
+        public Paddle Paddle
+        {
+            get
+            {
+                if (_paddle != null) return _paddle;
+                _paddle = FindFirstObjectByType<Paddle>();
+                return _paddle;
+            }
+        }
+
+        private Paddle _paddle;
         
         private IEnumerator Start()
         {
@@ -35,7 +51,7 @@ namespace Managers
             yield return new WaitForSeconds(0.2f);
             for (var i = 0; i < level.AmountOfBalls; i++)
             {
-                SpawnBall(ballInitialWorldPos);
+                SpawnBall_Internal(ballInitialWorldPos);
                 yield return new WaitForSeconds(0.2f);
             }
         }
@@ -116,11 +132,85 @@ namespace Managers
             return Spawner.Spawn(wallBrickPrefab, pos, Quaternion.identity);
         }
 
-        private void SpawnBall(Vector2 pos = default)
+        private Ball SpawnBall_Internal(Vector2 pos = default)
         {
             var ball = Spawner.Spawn(ballPrefab, pos, Quaternion.identity);
             var data = GameManager.Instance.GetBallData();
             ball.SetupBall(data);
+            _activeBalls.Add(ball);
+            return ball;
+        }
+
+        private void DestroyBall_Internal(Ball ball)
+        {
+            _activeBalls.Remove(ball);
+            Destroy(ball.gameObject);
+        }
+
+        public static Ball SpawnBall(Vector2 pos = default)
+        {
+            return Instance.SpawnBall_Internal(pos);
+        }
+
+        public static void DestroyBall(Ball ball)
+        {
+            Instance.DestroyBall_Internal(ball);
+        }
+
+        public static void ApplyPowerUp(PowerUpData data)
+        {
+            Instance.ApplyPowerUp_Internal(data);
+        }
+
+        private void ApplyPowerUp_Internal(PowerUpData data)
+        {
+            foreach (var effect in data.Effects)
+            {
+                switch (effect.Target)
+                {
+                    case EffectTarget.Global:
+                        ApplyGlobalEffect(effect);
+                        break;
+                    case EffectTarget.Paddle:
+                        ApplyPaddleEffect(effect);
+                        break;
+                    case EffectTarget.SingleBall:
+                        ApplySingleBallEffect(effect);
+                        break;
+                    case EffectTarget.AllBalls:
+                        ApplyAllBallsEffect(effect);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+        
+        private void ApplyGlobalEffect(PowerUpEffect effect){}
+
+        private void ApplyPaddleEffect(PowerUpEffect effect)
+        {
+            effect.Apply(Paddle.gameObject);
+        }
+
+        private void ApplySingleBallEffect(PowerUpEffect effect)
+        {
+            effect.Apply(_activeBalls.FirstOrDefault().gameObject);
+        }
+
+        private void ApplyAllBallsEffect(PowerUpEffect effect)
+        {
+            foreach (var ball in _activeBalls)
+            {
+                effect.Apply(ball.gameObject);
+            }
+        }
+
+        public static void RequestPowerUp(Vector3 pos)
+        {
+            var powerUpData = GameManager.Instance.PowerUpSettings.GetRandom();
+            var powerUp = Spawner.Spawn(Instance.powerUpPrefab, pos);
+            powerUp.Setup(powerUpData);
         }
     }
 }

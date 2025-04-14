@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace ScriptableObjects
 {
@@ -7,7 +8,7 @@ namespace ScriptableObjects
     {
         public BallSettingsData ballSettings;
         public PaddleSettingsData paddleSettings;
-        public ColorSettingsData colorSettingsData;
-        
+        [FormerlySerializedAs("colorSettingsData")] public ColorSettingsData colorSettings;
+        public PowerUpSettingsData powerUpSettings;
     }
 }

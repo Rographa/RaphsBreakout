@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ballSettings: {fileID: 11400000, guid: 9e79b3d2c5317664f99d82ba8c308701, type: 2}
   paddleSettings: {fileID: 11400000, guid: 53ddae51ea269a04ca59190de24d1c03, type: 2}
-  colorSettingsData: {fileID: 11400000, guid: 5790d4fab1ccbf64f829bce335c7cc42, type: 2}
+  colorSettings: {fileID: 11400000, guid: 5790d4fab1ccbf64f829bce335c7cc42, type: 2}
+  powerUpSettings: {fileID: 11400000, guid: 9309649a257d9a441b6d3f7167167880, type: 2}
