@@ -9,14 +9,17 @@ namespace ScriptableObjects
     [CreateAssetMenu(menuName = "Game Design/Levels/Level Data", fileName = "LevelData")]
     public class LevelData : DataObject
     {
+        [SerializeField] private int amountOfBalls = 3;
         [SerializeField] private Vector2Int mapSize = new Vector2Int(16, 10);
         [SerializeField] private Vector2 cellSize = new Vector2(0.5f, 0.25f);
         [SerializeField] private BrickData brickData;
         [Range(0, 40)] public int rowLimit = 8;
+        [Range(1, 3)] public int wallBorder = 1;
 
         public Vector2 toolRadius;
         //public CellType[,] Grid;
         public List<ListWrapper> Grid;
+        public int AmountOfBalls => amountOfBalls;
 
         public Vector2Int MapSize
         {

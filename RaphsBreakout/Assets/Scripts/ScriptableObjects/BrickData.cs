@@ -23,7 +23,7 @@ namespace ScriptableObjects
                 return data.id;
             }
 
-            return default;
+            return orderedList.Last().id;
         }
 
         public Brick Spawn(Vector2 position)

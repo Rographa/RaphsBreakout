@@ -13,6 +13,7 @@ namespace Managers
     public class LevelManager : MonoSingleton<LevelManager>
     {
         [SerializeField] private LevelData level;
+        [SerializeField] private Vector3 ballInitialWorldPos;
         [FormerlySerializedAs("wallBlockPrefab")] [SerializeField] private GameObject wallBrickPrefab;
         [SerializeField] private Ball ballPrefab;
         [GetComponent] private Grid _grid;
@@ -32,7 +33,11 @@ namespace Managers
             yield return new WaitForSeconds(0.2f);
             SetupLevel();
             yield return new WaitForSeconds(0.2f);
-            SpawnBall();
+            for (var i = 0; i < level.AmountOfBalls; i++)
+            {
+                SpawnBall(ballInitialWorldPos);
+                yield return new WaitForSeconds(0.2f);
+            }
         }
 
         private void SetupGrid()
@@ -44,20 +49,18 @@ namespace Managers
             _width = Mathf.CeilToInt(screenWidth / _grid.cellSize.x);
             _height = Mathf.CeilToInt(screenHeight / _grid.cellSize.y);
 
-            for (var i = 0; i < _height; i++)
+        }
+
+        private void SetupLevel()
+        {
+            for (var i = 0; i < level.Grid.Count; i++)
             {
-                for (var j = 0; j < _width; j++)
+                for (var j = 0; j < level.Grid[0].list.Count; j++)
                 {
-                    var pos = new Vector2Int(j, i);
-                    if (ShouldAddWallBrick(pos))
-                    {
-                        var wallBrick = SpawnWallBrick(pos);
-                        wallBrick.transform.parent = transform;
-                        _wallBrickList.Add(wallBrick);
-                    }
+                    ProcessCell((CellType)level.Grid[i].list[j], i, j);
                 }
             }
-
+            
             _wallBrickCollider = gameObject.AddComponent<PolygonCollider2D>();
             _wallBrickCollider.offset = transform.InverseTransformPoint(Vector3.zero);
             var list = new List<Bounds>();
@@ -81,17 +84,6 @@ namespace Managers
             }
         }
 
-        private void SetupLevel()
-        {
-            for (var i = 0; i < level.Grid.Count; i++)
-            {
-                for (var j = 0; j < level.Grid[0].list.Count; j++)
-                {
-                    ProcessCell((CellType)level.Grid[i].list[j], i, j);
-                }
-            }
-        }
-
         private void ProcessCell(CellType cellType, int x, int y)
         {
             var pos = _grid.GetCellCenterWorld(new Vector3Int(x, y, 0));
@@ -103,7 +95,9 @@ namespace Managers
                     level.BrickData.Spawn(pos);
                     break;
                 case CellType.WallBrick:
-                    SpawnWallBrick(pos);
+                    var wallBrick = SpawnWallBrick(pos);
+                    wallBrick.transform.parent = transform;
+                    _wallBrickList.Add(wallBrick);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(cellType), cellType, null);
@@ -127,11 +121,6 @@ namespace Managers
             var ball = Spawner.Spawn(ballPrefab, pos, Quaternion.identity);
             var data = GameManager.Instance.GetBallData();
             ball.SetupBall(data);
-        }
-
-        private bool ShouldAddWallBrick(Vector2Int position)
-        {
-            return position.x == 0 || position.x == _width - 2 || position.y == 0 || position.y == _height - 1;
         }
     }
 }

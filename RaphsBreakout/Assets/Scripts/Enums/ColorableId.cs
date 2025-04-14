@@ -6,4 +6,5 @@ public enum ColorableId{
       WeakBrick = 4,
       RegularBrick = 5,
       StrongBrick = 6,
+      RobustBrick = 7,
 }

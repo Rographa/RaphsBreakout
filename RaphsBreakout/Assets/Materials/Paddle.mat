@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Paddle
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 2885674dc90696349b49c999aadbbc23, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -66,6 +66,7 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
+    - _BlendAxis: 1
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
@@ -85,6 +86,8 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _ColorBottom: {r: 0.68463707, g: 0.57872015, b: 0.8018868, a: 1}
+    - _ColorTop: {r: 0.63529414, g: 0.76862746, b: 0.8784314, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

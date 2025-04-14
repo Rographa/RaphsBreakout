@@ -8,13 +8,13 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Brick
-  m_Shader: {fileID: 4800000, guid: a36b7719ff0465b42ab1407d67672c5f, type: 3}
+  m_Shader: {fileID: 4800000, guid: b18ccfdf140018941aef4b19ff3a5bd1, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - HITEFFECT_ON
   - ONLYINNEROUTLINE_ON
-  m_InvalidKeywords:
   - _ONLYINNEROUTLINE_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -100,6 +100,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _ParallaxMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Ramp:
+        m_Texture: {fileID: 2800000, guid: 427d584df063797459fd03e57dc2cb69, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _ShineMask:
@@ -227,6 +231,7 @@ Material:
     - _PosterizeGamma: 0.75
     - _PosterizeNumColors: 8
     - _PosterizeOutline: 0
+    - _PosterizeSteps: 4
     - _RadialClip: 45
     - _RadialClip2: 0
     - _RadialStartAngle: 90

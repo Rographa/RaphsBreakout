@@ -28,8 +28,11 @@ namespace Utilities
             var fields = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
             foreach (var field in fields)
             {
-                if (field.GetCustomAttribute<GetComponentAttribute>() == null) continue;
+                var attribute = field.GetCustomAttribute<GetComponentAttribute>(); 
+                if (attribute == null) continue;
                 var component = ((MonoBehaviour)target).GetComponent(field.FieldType);
+                if (component == null && attribute.SearchChildren)
+                    component = ((MonoBehaviour)target).GetComponentInChildren(field.FieldType);
                 if (component != null)
                 {
                     field.SetValue(target, component);

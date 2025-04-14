@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: BrickData
   m_EditorClassIdentifier: 
   prefab: {fileID: 3755480057293047846, guid: 4a2554d84bbe7b6448579aec4cb392f0, type: 3}
-  health: 5
+  health: 3
   colorData:
   - id: 4
-    health: 0
+    health: 1
   - id: 5
-    health: 5
+    health: 2
   - id: 6
-    health: 10
+    health: 3

@@ -10,23 +10,25 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b04c9261c2a74846a276685c7ccb340e, type: 3}
-  m_Name: ColorSettings
+  m_Name: DarkPastel
   m_EditorClassIdentifier: 
   colorDataList:
   - id: 0
-    color: {r: 0.2509804, g: 0.827451, b: 0.8392157, a: 1}
+    color: {r: 0.42352942, g: 0.41960785, b: 0.5568628, a: 1}
   - id: 1
-    color: {r: 0.8980393, g: 0.7960785, b: 0.5019608, a: 1}
+    color: {r: 0.101960786, g: 0.101960786, b: 0.18039216, a: 1}
   - id: 2
-    color: {r: 1, g: 0.56078434, b: 0.56078434, a: 1}
+    color: {r: 0, g: 0.9529412, b: 1, a: 1}
   - id: 3
-    color: {r: 1, g: 0.56078434, b: 0.56078434, a: 1}
+    color: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 1}
   - id: 4
-    color: {r: 0.49368104, g: 0.8113208, b: 0.56714416, a: 1}
+    color: {r: 1, g: 0.41960785, b: 0.41960785, a: 1}
   - id: 5
-    color: {r: 0.6792453, g: 0.38178623, b: 0.17621931, a: 1}
+    color: {r: 0.41568628, g: 0.3529412, b: 0.8039216, a: 1}
   - id: 6
-    color: {r: 0.3490566, g: 0.054334287, b: 0.07861444, a: 1}
+    color: {r: 0.25490198, g: 0.4117647, b: 0.88235295, a: 1}
+  - id: 7
+    color: {r: 0.18039216, g: 0.54509807, b: 0.34117648, a: 1}
   colorableIds:
   - Paddle
   - Background
@@ -35,3 +37,4 @@ MonoBehaviour:
   - WeakBrick
   - RegularBrick
   - StrongBrick
+  - RobustBrick

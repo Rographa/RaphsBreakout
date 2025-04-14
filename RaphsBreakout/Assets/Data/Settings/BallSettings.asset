@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df75ca94e9aa48a68e66ecf2c664baec, type: 3}
   m_Name: BallSettings
   m_EditorClassIdentifier: 
+  initialSize: 0.1625
   initialSpeed: 3
-  bumpSpeedMultiplier: 1.02
-  maxSpeed: 15
+  bumpSpeedMultiplier: 1
+  maxSpeed: 9
