@@ -425,7 +425,7 @@ namespace ScriptableObjects.Editor
             var cellMap = _levelData.GetCellMap();
             return position.x < _levelData.wallBorder ||
                    position.x > cellMap.x - _levelData.wallBorder - 1 ||
-                   position.y < _levelData.wallBorder ||
+                   //position.y < _levelData.wallBorder ||
                    position.y > cellMap.y - _levelData.wallBorder - 1;
         }
     }

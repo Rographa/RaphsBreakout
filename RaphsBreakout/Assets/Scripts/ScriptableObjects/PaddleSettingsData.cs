@@ -21,6 +21,8 @@ namespace ScriptableObjects
             set => moveForce = value;
         }
 
+        public float InitialSize => initialSize;
+
         public Vector3 GetInitialSize()
         {
             return new Vector3(initialSize, 0.25f, 1f);

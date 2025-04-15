@@ -9,6 +9,9 @@ namespace Managers
 {
     public class GameManager : MonoSingleton<GameManager>
     {
+        public static int BallLayer => LayerMask.NameToLayer("Ball");
+        public static int BallInPaddleLayer => LayerMask.NameToLayer("BallInPaddle");
+        
         [SerializeField] private GameSettingsData gameSettings;
         [SerializeField] private Paddle paddle;
 

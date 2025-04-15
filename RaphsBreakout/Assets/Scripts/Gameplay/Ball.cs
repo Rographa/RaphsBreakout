@@ -1,5 +1,6 @@
 using System;
 using Interfaces;
+using Managers;
 using ScriptableObjects;
 using UnityEngine;
 using Utilities;
@@ -20,15 +21,35 @@ namespace Gameplay
         private int _damage;
 
         public float Speed => _rb.linearVelocity.magnitude;
+        private static readonly string KillzoneTag = "Killzone";
 
-        public void SetupBall(BallSettingsData data)
+        public void Launch(Vector2 direction)
+        {
+            gameObject.layer = GameManager.BallLayer;
+            transform.parent = null;
+            _rb.bodyType = RigidbodyType2D.Dynamic;
+            _rb.WakeUp();
+            SetVelocity(direction * _initialSpeed);
+        }
+
+        public void Control(Transform parent)
+        {
+            gameObject.layer = GameManager.BallInPaddleLayer;
+            transform.parent = parent;
+            _rb.bodyType = RigidbodyType2D.Kinematic;
+        }
+
+        public void SetupBall(BallSettingsData data, bool spawnedByPaddle = false)
         {
             ComponentInjector.InjectComponents(this);
             _data = data;
             _initialSpeed = _data.InitialSpeed;
             _damage = data.Damage;
             SetSize(_data.InitialSize);
-            SetVelocity(new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * _initialSpeed);
+            if (!spawnedByPaddle)
+            {
+                SetVelocity(new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * _initialSpeed);
+            }
         }
 
         public void SetSize(float size)
@@ -48,6 +69,14 @@ namespace Gameplay
         {
             Reflect(other.GetContact(0).normal);
             TryApplyDamage(other);
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            if (other.CompareTag(KillzoneTag))
+            {
+                Destroy(this.gameObject);
+            }
         }
 
         private void TryApplyDamage(Collision2D other)

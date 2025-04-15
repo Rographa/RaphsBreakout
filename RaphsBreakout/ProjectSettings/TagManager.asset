@@ -3,16 +3,17 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Killzone
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Paddle
   - Water
   - UI
   - Ball
-  - 
+  - BallInPaddle
   - 
   - 
   - 

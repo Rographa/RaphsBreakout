@@ -49,11 +49,14 @@ namespace Managers
             yield return new WaitForSeconds(0.2f);
             SetupLevel();
             yield return new WaitForSeconds(0.2f);
+            
+            //Removing it for now
+            /*
             for (var i = 0; i < level.AmountOfBalls; i++)
             {
                 SpawnBall_Internal(ballInitialWorldPos);
                 yield return new WaitForSeconds(0.2f);
-            }
+            }*/
         }
 
         private void SetupGrid()
@@ -132,11 +135,11 @@ namespace Managers
             return Spawner.Spawn(wallBrickPrefab, pos, Quaternion.identity);
         }
 
-        private Ball SpawnBall_Internal(Vector2 pos = default)
+        private Ball SpawnBall_Internal(Vector2 pos = default, bool spawnInPaddle = false)
         {
             var ball = Spawner.Spawn(ballPrefab, pos, Quaternion.identity);
             var data = GameManager.Instance.GetBallData();
-            ball.SetupBall(data);
+            ball.SetupBall(data, spawnInPaddle);
             _activeBalls.Add(ball);
             return ball;
         }
@@ -150,6 +153,11 @@ namespace Managers
         public static Ball SpawnBall(Vector2 pos = default)
         {
             return Instance.SpawnBall_Internal(pos);
+        }
+
+        public static Ball SpawnBallInPaddle(Vector2 pos)
+        {
+            return Instance.SpawnBall_Internal(pos, true);
         }
 
         public static void DestroyBall(Ball ball)

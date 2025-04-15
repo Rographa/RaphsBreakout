@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Interfaces;
 using Managers;
 using ScriptableObjects;
@@ -21,17 +22,26 @@ namespace Gameplay
 
         private float _currentSpeed;
         private bool _movePerformedThisFrame;
+        private bool _aimPointMovedThisFrame;
         private PaddleSettingsData _data;
         [field: SerializeField] public ColorableId Id { get; set; }
-
+        [SerializeField] private Transform arrowHolder;
+        [SerializeField] private SpriteRenderer[] arrowRenderers;
+        
         private List<float> _sizeMultiplierList = new();
         private Vector3 _initialSize;
+
+        private Ball _currentBall;
+        private Vector3 _currentAimPosition;
+        private bool IsHoldingBall => _currentBall != null;
+        private static Vector3 BallSpawnPoint => new Vector3(0f, 0.125f, 0f);
 
         public void Setup(PaddleSettingsData data)
         {
             _data = data.Clone();
             _initialSize = _data.GetInitialSize();
-            SetSize(_initialSize);
+            SetSize(_initialSize.x);
+            SpawnBall();
         }
 
         public void SetColor(Color color)
@@ -44,6 +54,13 @@ namespace Gameplay
             _sizeMultiplierList.Add(multiplier);
             UpdateSize();
         }
+
+        public void SpawnBall()
+        {
+            _currentBall = LevelManager.SpawnBallInPaddle(arrowHolder.position);
+            _currentBall.Control(arrowHolder.parent);
+            FadeInArrow();
+        }
         public void RemoveSizeMultiplier(float multiplier)
         {
             _sizeMultiplierList.Remove(multiplier);
@@ -52,13 +69,14 @@ namespace Gameplay
         private void UpdateSize()
         {
             var currentSize = _sizeMultiplierList.Aggregate(_initialSize, (current, sizeMultiplier) => current * sizeMultiplier);
-            SetSize(currentSize);
+            SetSize(currentSize.x);
         }
 
-        private void SetSize(Vector3 size)
+        private void SetSize(float size)
         {
-            _renderer.transform.localScale = size;
-            _boxCollider.size = size;
+            var scale = new Vector3(size, _initialSize.y, _initialSize.z);
+            _renderer.transform.localScale = scale;
+            _boxCollider.size = scale;
         }
 
         public void OnMove(InputAction.CallbackContext context)
@@ -82,7 +100,38 @@ namespace Gameplay
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-           
+        }
+
+        public void OnPoint(InputAction.CallbackContext context)
+        {
+            var aimPoint = context.ReadValue<Vector2>();
+            _currentAimPosition = CameraManager.Main.ScreenToWorldPoint(aimPoint);
+            switch (context.phase)
+            {
+                case InputActionPhase.Disabled:
+                    break;
+                case InputActionPhase.Waiting:
+                    break;
+                case InputActionPhase.Started:
+                    break;
+                case InputActionPhase.Performed:
+                    _aimPointMovedThisFrame = true;
+                    break;
+                case InputActionPhase.Canceled:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public void OnAttack(InputAction.CallbackContext context)
+        {
+            if (IsHoldingBall)
+            {
+                _currentBall.Launch(arrowHolder.up);
+                _currentBall = null;
+                FadeOutArrow();
+            }
         }
 
         private void FixedUpdate()
@@ -93,10 +142,25 @@ namespace Gameplay
 
         private void LateUpdate()
         {
-            CheckInput();
+            CheckMoveInput();
+
+            if (IsHoldingBall)
+            {
+                CheckAimInput();
+            }
         }
 
-        private void CheckInput()
+        private void CheckAimInput()
+        {
+            if (!_aimPointMovedThisFrame) return;
+            var direction = (_currentAimPosition - arrowHolder.position).normalized;
+            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            var eulerAngles = arrowHolder.localEulerAngles;
+            eulerAngles.z = -90 + angle;
+            arrowHolder.localEulerAngles = eulerAngles;
+        }
+
+        private void CheckMoveInput()
         {
             if (_movePerformedThisFrame) return;
             _currentSpeed = 0f;
@@ -115,6 +179,26 @@ namespace Gameplay
             if (collectable != null)
             {
                 collectable.Collect();
+            }
+        }
+
+        private void FadeInArrow()
+        {
+            foreach (var rend in arrowRenderers)
+            {
+                var newColor = rend.color;
+                newColor.a = 1f;
+                rend.DOColor(newColor, 0.2f);
+            }
+        }
+
+        private void FadeOutArrow()
+        {
+            foreach (var rend in arrowRenderers)
+            {
+                var newColor = rend.color;
+                newColor.a = 0f;
+                rend.DOColor(newColor, 0.2f);
             }
         }
     }
