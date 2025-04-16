@@ -1,8 +1,10 @@
+using System;
 using System.Linq;
 using Gameplay;
 using Interfaces;
 using ScriptableObjects;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Utilities;
 
 namespace Managers
@@ -52,6 +54,34 @@ namespace Managers
         public void RequestColor(IColorable colorable)
         {
             colorable.SetColor(ColorSettings.Get(colorable.Id));
+        }
+        
+        // Input
+
+        public void OnFastForward(InputAction.CallbackContext context)
+        {
+            switch (context.phase)
+            {
+                case InputActionPhase.Disabled:
+                    break;
+                case InputActionPhase.Waiting:
+                    break;
+                case InputActionPhase.Started:
+                    SetTimeScale(2f);
+                    break;
+                case InputActionPhase.Performed:
+                    break;
+                case InputActionPhase.Canceled:
+                    SetTimeScale(1f);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public void SetTimeScale(float scale)
+        {
+            Time.timeScale = scale;
         }
     }
 }

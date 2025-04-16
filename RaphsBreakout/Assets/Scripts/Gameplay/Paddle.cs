@@ -21,6 +21,7 @@ namespace Gameplay
         [GetComponent] private BoxCollider2D _boxCollider;
 
         private float _currentSpeed;
+        private float _currentMoveForce;
         private bool _movePerformedThisFrame;
         private bool _aimPointMovedThisFrame;
         private PaddleSettingsData _data;
@@ -29,10 +30,12 @@ namespace Gameplay
         [SerializeField] private SpriteRenderer[] arrowRenderers;
         
         private List<float> _sizeMultiplierList = new();
+        private List<float> _speedMultiplierList = new();
         private Vector3 _initialSize;
 
         private Ball _currentBall;
         private Vector3 _currentAimPosition;
+        private int _ballsInStock;
         private bool IsHoldingBall => _currentBall != null;
         private static Vector3 BallSpawnPoint => new Vector3(0f, 0.125f, 0f);
 
@@ -40,6 +43,8 @@ namespace Gameplay
         {
             _data = data.Clone();
             _initialSize = _data.GetInitialSize();
+            _ballsInStock = data.BallsInStock;
+            _currentMoveForce = MoveForce;
             SetSize(_initialSize.x);
             SpawnBall();
         }
@@ -48,18 +53,17 @@ namespace Gameplay
         {
             _renderer.color = color;
         }
-
-        public void AddSizeMultiplier(float multiplier)
-        {
-            _sizeMultiplierList.Add(multiplier);
-            UpdateSize();
-        }
-
         public void SpawnBall()
         {
             _currentBall = LevelManager.SpawnBallInPaddle(arrowHolder.position);
             _currentBall.Control(arrowHolder.parent);
             FadeInArrow();
+        }
+        
+        public void AddSizeMultiplier(float multiplier)
+        {
+            _sizeMultiplierList.Add(multiplier);
+            UpdateSize();
         }
         public void RemoveSizeMultiplier(float multiplier)
         {
@@ -71,7 +75,6 @@ namespace Gameplay
             var currentSize = _sizeMultiplierList.Aggregate(_initialSize, (current, sizeMultiplier) => current * sizeMultiplier);
             SetSize(currentSize.x);
         }
-
         private void SetSize(float size)
         {
             var scale = new Vector3(size, _initialSize.y, _initialSize.z);
@@ -79,6 +82,23 @@ namespace Gameplay
             _boxCollider.size = scale;
         }
 
+        public void AddSpeedMultiplier(float multiplier)
+        {
+            _speedMultiplierList.Add(multiplier);
+            UpdateSpeed();
+        }
+
+        public void RemoveSpeedMultiplier(float multiplier)
+        {
+            _speedMultiplierList.Remove(multiplier);
+            UpdateSpeed();
+        }
+
+        private void UpdateSpeed()
+        {
+            _currentMoveForce =
+                _speedMultiplierList.Aggregate(MoveForce, (current, speedMultiplier) => current * speedMultiplier);
+        }
         public void OnMove(InputAction.CallbackContext context)
         {
             _movePerformedThisFrame = false;
@@ -92,7 +112,7 @@ namespace Gameplay
                     break;
                 case InputActionPhase.Started:
                 case InputActionPhase.Performed:
-                    _currentSpeed = direction.x * MoveForce;
+                    _currentSpeed = direction.x * _currentMoveForce;
                     _movePerformedThisFrame = true;
                     break;
                 case InputActionPhase.Canceled:
@@ -126,12 +146,33 @@ namespace Gameplay
 
         public void OnAttack(InputAction.CallbackContext context)
         {
-            if (IsHoldingBall)
+            switch (context.phase)
             {
-                _currentBall.Launch(arrowHolder.up);
-                _currentBall = null;
-                FadeOutArrow();
+                case InputActionPhase.Disabled:
+                    break;
+                case InputActionPhase.Waiting:
+                    break;
+                case InputActionPhase.Started:
+                    if (IsHoldingBall)
+                    {
+                        _currentBall.Launch(arrowHolder.up);
+                        _currentBall = null;
+                        FadeOutArrow();
+                    }
+                    else if (_ballsInStock > 0)
+                    {
+                        _ballsInStock--;
+                        SpawnBall();
+                    }
+                    break;
+                case InputActionPhase.Performed:
+                    break;
+                case InputActionPhase.Canceled:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
+            
         }
 
         private void FixedUpdate()

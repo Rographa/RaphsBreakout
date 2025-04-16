@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 3755480057293047846, guid: 4a2554d84bbe7b6448579aec4cb392f0, type: 3}
   health: 3
-  chanceForPowerUp: 0.15
+  chanceForPowerUp: 0.2
   colorData:
   - id: 4
     health: 1

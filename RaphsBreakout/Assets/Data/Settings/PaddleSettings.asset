@@ -15,3 +15,4 @@ MonoBehaviour:
   moveForce: 14
   maxSpeed: 25
   initialSize: 1.5
+  ballsInStock: 3

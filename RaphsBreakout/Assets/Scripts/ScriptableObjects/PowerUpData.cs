@@ -12,6 +12,7 @@ namespace ScriptableObjects
 
         [SerializeReference] private List<PowerUpEffect> effects = new();
 
+        public string PowerUpName => powerUpName;
         public List<PowerUpEffect> Effects => effects;
     }
 }

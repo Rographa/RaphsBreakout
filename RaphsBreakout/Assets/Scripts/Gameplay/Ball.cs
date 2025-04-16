@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Interfaces;
 using Managers;
 using ScriptableObjects;
@@ -15,16 +17,21 @@ namespace Gameplay
         [GetComponent] private TrailRenderer _trail;
         [GetComponent] private CircleCollider2D _circleCollider;
 
+        private List<float> _sizeMultiplierList = new();
         private BallSettingsData _data;
+        private Color _initialColor;
         private Vector2 _currentSpeed;
         private float _initialSpeed;
+        private float _initialSize;
         private int _damage;
-
+        private int _bonusDamage;
+        private int TotalDamage => _damage + _bonusDamage;
         public float Speed => _rb.linearVelocity.magnitude;
         private static readonly string KillzoneTag = "Killzone";
 
         public void Launch(Vector2 direction)
         {
+            _trail.emitting = true;
             gameObject.layer = GameManager.BallLayer;
             transform.parent = null;
             _rb.bodyType = RigidbodyType2D.Dynamic;
@@ -37,6 +44,7 @@ namespace Gameplay
             gameObject.layer = GameManager.BallInPaddleLayer;
             transform.parent = parent;
             _rb.bodyType = RigidbodyType2D.Kinematic;
+            _trail.emitting = false;
         }
 
         public void SetupBall(BallSettingsData data, bool spawnedByPaddle = false)
@@ -45,13 +53,30 @@ namespace Gameplay
             _data = data;
             _initialSpeed = _data.InitialSpeed;
             _damage = data.Damage;
-            SetSize(_data.InitialSize);
+            _initialColor = _renderer.color;
+            _initialSize = _data.InitialSize;
+            SetSize(_initialSize);
             if (!spawnedByPaddle)
             {
                 SetVelocity(new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * _initialSpeed);
             }
         }
-
+        public void AddSizeMultiplier(float multiplier)
+        {
+            _sizeMultiplierList.Add(multiplier);
+            UpdateSize();
+        }
+        public void RemoveSizeMultiplier(float multiplier)
+        {
+            _sizeMultiplierList.Remove(multiplier);
+            UpdateSize();
+        }
+        private void UpdateSize()
+        {
+            var currentSize =
+                _sizeMultiplierList.Aggregate(_initialSize, (current, sizeMultiplier) => current * sizeMultiplier);
+            SetSize(currentSize);
+        }
         public void SetSize(float size)
         {
             _circleCollider.radius = size / 2f;
@@ -75,7 +100,7 @@ namespace Gameplay
         {
             if (other.CompareTag(KillzoneTag))
             {
-                Destroy(this.gameObject);
+                LevelManager.DestroyBall(this);
             }
         }
 
@@ -85,7 +110,7 @@ namespace Gameplay
             damageable ??= other.gameObject.GetComponentInParent<IDamageable>();
             if (damageable != null)
             {
-                damageable.TakeDamage(_damage);
+                damageable.TakeDamage(TotalDamage);
             }
         }
 
@@ -105,9 +130,24 @@ namespace Gameplay
             _trail.endColor = color;
         }
 
+        public void ResetColor()
+        {
+            SetColor(_initialColor);
+        }
+
         public void SetVelocity(Vector2 velocity)
         {
             _rb.linearVelocity = velocity;
+        }
+
+        public void AddBonusDamage(int amount)
+        {
+            _bonusDamage += amount;
+        }
+
+        public void RemoveBonusDamage(int amount)
+        {
+            _bonusDamage -= amount;
         }
     }
 }

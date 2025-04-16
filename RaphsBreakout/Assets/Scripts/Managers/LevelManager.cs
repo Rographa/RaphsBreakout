@@ -19,6 +19,7 @@ namespace Managers
         [FormerlySerializedAs("wallBlockPrefab")] [SerializeField] private GameObject wallBrickPrefab;
         [SerializeField] private Ball ballPrefab;
         [SerializeField] private PowerUp powerUpPrefab;
+        [SerializeField] private PowerUpText powerUpTextPrefab;
         [GetComponent] private Grid _grid;
 
         private int _width;
@@ -174,15 +175,19 @@ namespace Managers
         {
             foreach (var effect in data.Effects)
             {
+                var position = Vector3.zero;
+                
                 switch (effect.Target)
                 {
                     case EffectTarget.Global:
                         ApplyGlobalEffect(effect);
                         break;
                     case EffectTarget.Paddle:
+                        position = Paddle.transform.position + (Vector3)Vector2.up * 2;
                         ApplyPaddleEffect(effect);
                         break;
                     case EffectTarget.SingleBall:
+                        position = _activeBalls.FirstOrDefault()?.transform.position ?? Vector3.zero;
                         ApplySingleBallEffect(effect);
                         break;
                     case EffectTarget.AllBalls:
@@ -191,6 +196,8 @@ namespace Managers
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
+                var powerUpText = Spawner.Spawn(powerUpTextPrefab, position);
+                powerUpText.Setup(data.PowerUpName);
             }
         }
         

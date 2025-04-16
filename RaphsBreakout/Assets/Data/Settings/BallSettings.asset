@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSize: 0.1625
   initialSpeed: 3
-  bumpSpeedMultiplier: 1
+  bumpSpeedMultiplier: 1.005
   maxSpeed: 9
   damage: 1

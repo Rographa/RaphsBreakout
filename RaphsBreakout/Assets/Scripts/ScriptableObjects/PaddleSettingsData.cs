@@ -8,6 +8,7 @@ namespace ScriptableObjects
         [SerializeField] private float moveForce;
         [SerializeField] private float maxSpeed;
         [SerializeField] private float initialSize;
+        [SerializeField] private int ballsInStock;
 
         public float MaxSpeed
         {
@@ -22,6 +23,7 @@ namespace ScriptableObjects
         }
 
         public float InitialSize => initialSize;
+        public int BallsInStock => ballsInStock;
 
         public Vector3 GetInitialSize()
         {

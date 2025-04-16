@@ -48,6 +48,11 @@ namespace Managers
             throw new System.NotImplementedException();
         }
 
+        public void OnFastForward(InputAction.CallbackContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public void OnNavigate(InputAction.CallbackContext context)
         {
             throw new System.NotImplementedException();

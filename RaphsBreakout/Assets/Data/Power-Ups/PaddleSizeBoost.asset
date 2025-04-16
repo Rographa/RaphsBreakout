@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4766809bb50d4ec18e8b74a3f107a69b, type: 3}
   m_Name: PaddleSizeBoost
   m_EditorClassIdentifier: 
-  powerUpName: Paddle Size Boost
+  powerUpName: size up
   effects:
   - {fileID: 11400000, guid: 29649839d3865c74793af17eed5048ca, type: 2}
