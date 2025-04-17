@@ -12,6 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cf0a881de1ea39498123a5f80df6a6d, type: 3}
   m_Name: GameSettings
   m_EditorClassIdentifier: 
+  levels:
+  - {fileID: 11400000, guid: 4f5b1aa7615bec841886f65379370414, type: 2}
+  - {fileID: 11400000, guid: 52bea50e107bf7247ae6a7de39023d12, type: 2}
+  - {fileID: 11400000, guid: b86980102ee86e54bb23fc502fe32e58, type: 2}
+  - {fileID: 11400000, guid: 1b206c5d4e44e6840a0f0bcb8dfea009, type: 2}
+  - {fileID: 11400000, guid: 29bec02d523e7564788600804c3f0c5c, type: 2}
+  - {fileID: 11400000, guid: 43681a5602da6f34c97bce9bee4c6af4, type: 2}
+  - {fileID: 11400000, guid: 3f6ac87ebd329534c8f2ca40dae43c2b, type: 2}
+  - {fileID: 11400000, guid: 981a32873e7462344a00882b3fe7b3db, type: 2}
+  - {fileID: 11400000, guid: d5e0f271057c7b141a8331130059880d, type: 2}
+  - {fileID: 11400000, guid: f2e7067128e20de41949719437b9182d, type: 2}
+  - {fileID: 11400000, guid: d9a28cc8a63090c40841c9b7720697b4, type: 2}
+  - {fileID: 11400000, guid: bdd67d3bb9a0d6e4c9625e3ef10e7cad, type: 2}
+  - {fileID: 11400000, guid: 5d992ab318aaa624d9adb21c90cb813a, type: 2}
+  - {fileID: 11400000, guid: 3806f1694c414af4ba571549dc762901, type: 2}
+  - {fileID: 11400000, guid: 7a277b9c54e25324da5c73bfbafc12a8, type: 2}
+  - {fileID: 11400000, guid: df256abefdca8af44af8d4f66a402b4e, type: 2}
   ballSettings: {fileID: 11400000, guid: 9e79b3d2c5317664f99d82ba8c308701, type: 2}
   paddleSettings: {fileID: 11400000, guid: 53ddae51ea269a04ca59190de24d1c03, type: 2}
   colorSettings: {fileID: 11400000, guid: 5790d4fab1ccbf64f829bce335c7cc42, type: 2}

@@ -41,8 +41,10 @@ namespace Managers
         }
 
         private Paddle _paddle;
+
+        public void StartGame() => StartCoroutine(StartGameRoutine());
         
-        private IEnumerator Start()
+        private IEnumerator StartGameRoutine()
         {
             _mainCamera = Camera.main;
             transform.position = CameraManager.Main.ViewportToWorldPoint(Vector3.zero);
@@ -50,7 +52,8 @@ namespace Managers
             yield return new WaitForSeconds(0.2f);
             SetupLevel();
             yield return new WaitForSeconds(0.2f);
-            
+            SetupPaddle();
+
             //Removing it for now
             /*
             for (var i = 0; i < level.AmountOfBalls; i++)
@@ -102,6 +105,11 @@ namespace Managers
                 
                 _wallBrickCollider.SetPath(i, new []{point1, point2, point3, point4});
             }
+        }
+
+        private void SetupPaddle()
+        {
+            Paddle.Setup(GameManager.Instance.PaddleSettings);
         }
 
         private void ProcessCell(CellType cellType, int x, int y)
@@ -226,6 +234,11 @@ namespace Managers
             var powerUpData = GameManager.Instance.PowerUpSettings.GetRandom();
             var powerUp = Spawner.Spawn(Instance.powerUpPrefab, pos);
             powerUp.Setup(powerUpData);
+        }
+
+        public static void SetLevel(LevelData level)
+        {
+            Instance.level = level;
         }
     }
 }

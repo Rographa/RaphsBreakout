@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Enums;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using Utilities;
 
@@ -9,6 +13,9 @@ namespace ScriptableObjects
     [CreateAssetMenu(menuName = "Game Design/Levels/Level Data", fileName = "LevelData")]
     public class LevelData : DataObject
     {
+        private const string LevelDataPath = "Assets/Data/Levels";
+        
+        public uint levelId;
         [SerializeField] private int amountOfBalls = 3;
         [SerializeField] private Vector2Int mapSize = new Vector2Int(16, 10);
         [SerializeField] private Vector2 cellSize = new Vector2(0.5f, 0.25f);
@@ -37,6 +44,21 @@ namespace ScriptableObjects
                 Mathf.CeilToInt(mapSize.x / cellSize.x),
                 Mathf.CeilToInt(mapSize.y / cellSize.y)
             );
+        }
+
+        [MenuItem("Breakout/Update Level IDs")]
+        public static void GenerateLevelIDs()
+        {
+
+            var guidList = AssetDatabase.FindAssets($"t: {nameof(LevelData)}");
+            foreach (var guid in guidList)
+            {
+                var levelData = AssetDatabase.LoadAssetAtPath<LevelData>(AssetDatabase.GUIDToAssetPath(guid));
+                var result = new String(levelData.name.Where(Char.IsDigit).ToArray());
+                var id = uint.Parse(result);
+                levelData.levelId = id;
+                EditorUtility.SetDirty(levelData);
+            }
         }
     }
 

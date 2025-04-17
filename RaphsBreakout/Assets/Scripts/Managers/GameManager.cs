@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Gameplay;
 using Interfaces;
@@ -11,26 +12,23 @@ namespace Managers
 {
     public class GameManager : MonoSingleton<GameManager>
     {
+        public const string GameScene = "Game";
+        public const string MainMenuScene = "MainMenu";
+        
         public static int BallLayer => LayerMask.NameToLayer("Ball");
         public static int BallInPaddleLayer => LayerMask.NameToLayer("BallInPaddle");
         
         [SerializeField] private GameSettingsData gameSettings;
-        [SerializeField] private Paddle paddle;
 
         private ColorSettingsData ColorSettings => gameSettings.colorSettings;
         public PowerUpSettingsData PowerUpSettings => gameSettings.powerUpSettings;
+        public PaddleSettingsData PaddleSettings => gameSettings.paddleSettings;
+        public List<LevelData> Levels => gameSettings.levels;
         protected override void Init()
         {
             base.Init();
             SetupColors();
-            SetupPaddle();
         }
-
-        private void SetupPaddle()
-        {
-            paddle.Setup(gameSettings.paddleSettings);
-        }
-
         private void SetupColors()
         {
             var targets = FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None)
@@ -82,6 +80,11 @@ namespace Managers
         public void SetTimeScale(float scale)
         {
             Time.timeScale = scale;
+        }
+
+        public static void LoadLevel(LevelData level)
+        {
+            LevelManager.SetLevel(level);
         }
     }
 }

@@ -12,4 +12,9 @@ namespace Utilities
             SearchChildren = searchChildren;
         }
     }
+
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
+    public class GetComponentsAttribute : GetComponentAttribute
+    {
+    }
 }

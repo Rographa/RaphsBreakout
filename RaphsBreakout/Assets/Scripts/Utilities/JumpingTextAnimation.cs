@@ -6,9 +6,9 @@ namespace Utilities
 {
     public class JumpingTextAnimation : MonoBehaviour
     {
-        [SerializeField] private float amplitude = 10f;
-        [SerializeField] private float frequency = 2f;
-        [SerializeField] private float charDelay = 0.1f;
+        [SerializeField] private float amplitude = 0.1f;
+        [SerializeField] private float frequency = 12f;
+        [SerializeField] private float charDelay = 0.5f;
 
         [GetComponent] private TMP_Text _textComponent;
         private TMP_TextInfo _textInfo;

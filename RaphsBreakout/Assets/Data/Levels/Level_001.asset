@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee3d42d2a15c42c2a85da3546b8c66f4, type: 3}
-  m_Name: LevelData
+  m_Name: Level_001
   m_EditorClassIdentifier: 
+  levelId: 1
   amountOfBalls: 3
   mapSize: {x: 16, y: 10}
   cellSize: {x: 0.5, y: 0.25}
