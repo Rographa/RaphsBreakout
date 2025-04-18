@@ -14,6 +14,8 @@ namespace Managers
 {
     public class LevelManager : MonoSingleton<LevelManager>
     {
+        public static event Action OnGameOver;
+        
         [SerializeField] private LevelData level;
         [SerializeField] private Vector3 ballInitialWorldPos;
         [FormerlySerializedAs("wallBlockPrefab")] [SerializeField] private GameObject wallBrickPrefab;
@@ -42,12 +44,19 @@ namespace Managers
 
         private Paddle _paddle;
 
+        protected override void Init()
+        {
+            base.Init();
+            GameManager.OnSceneChanged += (s) => ResetLevel();
+        }
+
         public void StartGame() => StartCoroutine(StartGameRoutine());
         
         private IEnumerator StartGameRoutine()
         {
-            _mainCamera = Camera.main;
-            transform.position = CameraManager.Main.ViewportToWorldPoint(Vector3.zero);
+            _mainCamera = CameraManager.Main;
+            transform.position = _mainCamera.ViewportToWorldPoint(Vector3.zero);
+            ResetLevel();
             SetupGrid();
             yield return new WaitForSeconds(0.2f);
             SetupLevel();
@@ -110,6 +119,7 @@ namespace Managers
         private void SetupPaddle()
         {
             Paddle.Setup(GameManager.Instance.PaddleSettings);
+            Paddle.SetInput(true);
         }
 
         private void ProcessCell(CellType cellType, int x, int y)
@@ -157,6 +167,13 @@ namespace Managers
         {
             _activeBalls.Remove(ball);
             Destroy(ball.gameObject);
+
+            if (Paddle.BallsInStock == 0 && _activeBalls.Count == 0)
+            {
+                Paddle.SetInput(false);
+                Time.timeScale = 0;
+                OnGameOver?.Invoke();
+            }
         }
 
         public static Ball SpawnBall(Vector2 pos = default)
@@ -239,6 +256,29 @@ namespace Managers
         public static void SetLevel(LevelData level)
         {
             Instance.level = level;
+        }
+
+        public static void ResetLevel()
+        {
+            if (Instance._activeBalls is { Count: > 0 })
+            {
+                Instance._activeBalls.Clear();
+            }
+
+            if (Instance._wallBrickList is { Count: > 0 })
+            {
+                for (var i = Instance._wallBrickList.Count - 1; i >= 0; i--)
+                {
+                    var target = Instance._wallBrickList[i];
+                    Destroy(target);
+                }
+                Instance._wallBrickList.Clear();
+            }
+
+            if (Instance._wallBrickCollider != null)
+            {
+                Destroy(Instance._wallBrickCollider);
+            }
         }
     }
 }

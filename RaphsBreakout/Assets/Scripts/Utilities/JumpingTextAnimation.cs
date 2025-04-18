@@ -6,6 +6,7 @@ namespace Utilities
 {
     public class JumpingTextAnimation : MonoBehaviour
     {
+        [SerializeField] private bool unscaled;
         [SerializeField] private float amplitude = 0.1f;
         [SerializeField] private float frequency = 12f;
         [SerializeField] private float charDelay = 0.5f;
@@ -52,7 +53,7 @@ namespace Utilities
                 var charInfo = _textInfo.characterInfo[i];
                 if (!charInfo.isVisible) continue;
 
-                var offset = Mathf.Sin(Time.time * frequency + i * charDelay) * amplitude;
+                var offset = Mathf.Sin((unscaled ? Time.unscaledTime : Time.time) * frequency + i * charDelay) * amplitude;
                 ApplyOffsetToCharacter(i, offset, ref meshInfo[charInfo.materialReferenceIndex].vertices);
             }
 

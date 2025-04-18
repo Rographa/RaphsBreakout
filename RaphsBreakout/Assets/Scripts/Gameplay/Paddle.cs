@@ -36,11 +36,14 @@ namespace Gameplay
         private Ball _currentBall;
         private Vector3 _currentAimPosition;
         private int _ballsInStock;
+        private bool _inputEnabled;
         private bool IsHoldingBall => _currentBall != null;
         private static Vector3 BallSpawnPoint => new Vector3(0f, 0.125f, 0f);
+        public int BallsInStock => _ballsInStock;
 
         public void Setup(PaddleSettingsData data)
         {
+            ComponentInjector.InjectComponents(this);
             _data = data.Clone();
             _initialSize = _data.GetInitialSize();
             _ballsInStock = data.BallsInStock;
@@ -101,6 +104,7 @@ namespace Gameplay
         }
         public void OnMove(InputAction.CallbackContext context)
         {
+            if (!_inputEnabled) return;
             _movePerformedThisFrame = false;
             var direction = context.ReadValue<Vector2>();
             switch (context.phase)
@@ -124,6 +128,7 @@ namespace Gameplay
 
         public void OnPoint(InputAction.CallbackContext context)
         {
+            if (!_inputEnabled) return;
             var aimPoint = context.ReadValue<Vector2>();
             _currentAimPosition = CameraManager.Main.ScreenToWorldPoint(aimPoint);
             switch (context.phase)
@@ -146,6 +151,7 @@ namespace Gameplay
 
         public void OnAttack(InputAction.CallbackContext context)
         {
+            if (!_inputEnabled) return;
             switch (context.phase)
             {
                 case InputActionPhase.Disabled:
@@ -183,11 +189,13 @@ namespace Gameplay
 
         private void LateUpdate()
         {
-            CheckMoveInput();
-
-            if (IsHoldingBall)
+            if (_inputEnabled)
             {
-                CheckAimInput();
+                CheckMoveInput();
+                if (IsHoldingBall)
+                {
+                    CheckAimInput();
+                }
             }
         }
 
@@ -241,6 +249,11 @@ namespace Gameplay
                 newColor.a = 0f;
                 rend.DOColor(newColor, 0.2f);
             }
+        }
+
+        public void SetInput(bool value)
+        {
+            _inputEnabled = value;
         }
     }
 }

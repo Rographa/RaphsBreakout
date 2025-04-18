@@ -28,7 +28,7 @@ namespace Utilities
             _isInitialized = true;
         }
 
-        private void Awake()
+        protected virtual void Awake()
         {
             if (_instance != null && _instance != this)
             {

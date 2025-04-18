@@ -46,6 +46,7 @@ namespace ScriptableObjects
             );
         }
 
+        #if UNITY_EDITOR
         [MenuItem("Breakout/Update Level IDs")]
         public static void GenerateLevelIDs()
         {
@@ -60,6 +61,7 @@ namespace ScriptableObjects
                 EditorUtility.SetDirty(levelData);
             }
         }
+        #endif
     }
 
 }

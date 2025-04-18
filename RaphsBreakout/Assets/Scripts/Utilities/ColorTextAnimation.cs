@@ -9,6 +9,7 @@ namespace Utilities
 {
     public class ColorTextAnimation : MonoBehaviour
     {
+        [SerializeField] private bool unscaled;
         [SerializeField] private float transitionDuration = 2f;
         [SerializeField] private bool randomColors;
         [SerializeField] private List<Color> colors;
@@ -40,7 +41,7 @@ namespace Utilities
         {
             while (gameObject.activeInHierarchy)
             {
-                for (var i = 0f; i < 1f; i += Time.deltaTime / transitionDuration)
+                for (var i = 0f; i < 1f; i += (unscaled ? Time.unscaledDeltaTime : Time.deltaTime) / transitionDuration)
                 {
                     _textComponent.color = Color.Lerp(_currentColor, _colorTarget, i);
                     yield return new WaitForEndOfFrame();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Managers;
 using UnityEngine;
 
 namespace Utilities
@@ -8,8 +9,17 @@ namespace Utilities
     public class ComponentInjector : MonoSingleton<ComponentInjector>
     {
         private static List<MonoBehaviour> _injected = new();
-        private void Awake()
+        
+        protected override void Init()
         {
+            base.Init();
+            InjectAll();
+            GameManager.OnSceneChanged += OnSceneChanged;
+        }
+
+        private void OnSceneChanged(string sceneName)
+        {
+            _injected.RemoveAll(x => x == null);
             InjectAll();
         }
 

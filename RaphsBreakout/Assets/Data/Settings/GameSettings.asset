@@ -29,6 +29,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3806f1694c414af4ba571549dc762901, type: 2}
   - {fileID: 11400000, guid: 7a277b9c54e25324da5c73bfbafc12a8, type: 2}
   - {fileID: 11400000, guid: df256abefdca8af44af8d4f66a402b4e, type: 2}
+  - {fileID: 11400000, guid: a69b5ce2ff75bc543b9d0beca641d6e3, type: 2}
   ballSettings: {fileID: 11400000, guid: 9e79b3d2c5317664f99d82ba8c308701, type: 2}
   paddleSettings: {fileID: 11400000, guid: 53ddae51ea269a04ca59190de24d1c03, type: 2}
   colorSettings: {fileID: 11400000, guid: 5790d4fab1ccbf64f829bce335c7cc42, type: 2}
